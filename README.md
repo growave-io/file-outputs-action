@@ -1,23 +1,23 @@
-# Hello world JavaScript action
+# File Outputs Action
 
-This action prints "Hello World" or "Hello" + the name of a person to greet to the log. To learn how this action was built, see "[Creating a JavaScript action](https://help.github.com/en/articles/creating-a-javascript-action)" in the GitHub Help documentation.
+Set outputs from multiple files.
 
 ## Inputs
 
-### `who-to-greet`
+### `files`
 
-**Required** The name of the person to greet. Default `"World"`.
+**Required** The files to set as outputs.
 
-## Outputs
+This is of the format: `name=path/to/file` where `name` is the name of the output of this action. Multiple can be set by using multiple lines.
 
-### `time`
-
-The time we greeted you.
+Prefix the line with `!` to add a mask for the file contents (beware if this is a multi-line file as GitHub Actions doesn't support multiline masking, so we mask per line, so ensure each line is approproate to be masked. ie: not a short common string). By default 'utf8' encoding is used for reading the file, this can be changed by suffixing the line with `|<encoding>`, eg: `|utf16`.
 
 ## Example usage
 
 ```yaml
-uses: actions/hello-world-javascript-action@main
+uses: edwardgeorge/file-outputs-action@main
 with:
-  who-to-greet: 'Mona the Octocat'
+  files: |
+    output1=foo.txt
+    output2=bar.txt
 ```

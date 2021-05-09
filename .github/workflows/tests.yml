@@ -1,0 +1,44 @@
+name: "units-test"
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'releases/*'
+
+jobs:
+  # unit tests
+  units:
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: npm ci
+    - run: npm test
+
+  # test action works running from the graph
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        echo -n "hello, world" > test_output_1.txt
+        echo "multiline secret,
+        multiline!" > test_output_2.txt
+        echo -n "single line secret" > test_output_3.txt
+    - uses: ./
+      id: files
+      with:
+        files: |
+          out1=test_output_1.txt|utf8
+          !out2=test_output_2.txt
+          !out3=test_output_3.txt
+    - run: |
+        assert """${{ steps.files.outputs.out1 }}""" == open("test_output_1.txt").read()
+        assert """${{ steps.files.outputs.out2 }}""" == open("test_output_2.txt").read()
+        assert """${{ steps.files.outputs.out3 }}""" == open("test_output_3.txt").read()
+      shell: python
+    - run: |
+        cat test_output_1.txt
+        cat test_output_2.txt
+        cat test_output_3.txt
