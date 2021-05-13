@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const command = require('@actions/core/lib/command');
 const fs = require("fs");
-const github = require('@actions/github');
 
 function LineFormatError(line) {
   this.message = `line is not in correct format: ${line}`;
@@ -16,7 +15,7 @@ try {
     }
     const matches = line.match(/^([!]?)([a-zA-Z_][a-zA-Z0-9_-]*)=([^|]+)(?:$|\|(.+))/);
     if (matches === null) {
-      throw LineFormatError(line);
+      throw new LineFormatError(line);
     }
     const encoding = matches[5] || "utf8";
     console.log(`reading '${matches[3]}' (encoding: ${encoding}) into output: ${matches[2]}`);
