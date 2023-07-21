@@ -15,7 +15,7 @@ Prefix the line with `!` to add a mask for the file contents (beware if this is 
 ## Example usage
 
 ```yaml
-uses: edwardgeorge/file-outputs-action@main
+uses: growave-io/file-outputs-action@main
 with:
   files: |
     output1=foo.txt
